@@ -32,27 +32,8 @@ export class UserController {
     }
 
     public async login(req: Request, res: Response) {
-        const user: any = this.userRepository.find({code: req.body.code , password: req.body.password});
-        return this.userServer.loginServer(user)
-    }
-
-
-
-    async all(request: Request, response: Response, next: NextFunction) {
-        return this.userRepository.find();
-    }
-
-    async one(request: Request, response: Response, next: NextFunction) {
-        return this.userRepository.findOne(request.params.id);
-    }
-
-    async save(request: Request, response: Response, next: NextFunction) {
-        return this.userRepository.save(request.body);
-    }
-
-    async remove(request: Request, response: Response, next: NextFunction) {
-        let userToRemove = await this.userRepository.findOne(request.params.id);
-        await this.userRepository.remove(userToRemove);
+        const user: any = await this.userRepository.find({code: req.body.code, password: req.body.password});
+        return this.userServer.loginServer(user[0])
     }
 
 }

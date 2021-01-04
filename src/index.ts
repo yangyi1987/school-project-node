@@ -16,16 +16,16 @@ createConnection().then(async connection => {
     app.use((req: Request, res: Response, next: Function)=>{
         res.header({
             "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "GET POST OPTIONS DELETE PUT"
-        })
-        if(req.path !== '/login') {
-            userServer.verifyToken(req.header.authorization).then(()=>{
-                next()
-            }).catch((err: Error)=>{
-                res.type("json")
-                res.status(401).send({code: 401, message: "token 过期,或没有token"})
-            })
-        }
+            "Access-Control-Allow-Methods": "GET,POST OPTIONS DELETE PUT"
+        });
+        // if(req.path !== '/login') {
+        //     userServer.verifyToken(req.header.authorization).then(()=>{
+        //         next()
+        //     }).catch((err: Error)=>{
+        //         res.type("json");
+        //         res.status(401).send({code: 401, message: "token 过期,或没有token"})
+        //     })
+        // }
     })
 
     // register express routes from defined application routes
@@ -39,7 +39,6 @@ createConnection().then(async connection => {
             }
         });
     });
-
 
     // start express server
     app.listen(3000);

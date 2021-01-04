@@ -27,6 +27,12 @@ const Routes: Array<IRouter> = [{
     route: "/users",
     controller: UserController,
     action: "update"
+},
+{
+    method: "post",
+    route: "/login",
+    controller: UserController,
+    action: "login"
 }
 
 ];
