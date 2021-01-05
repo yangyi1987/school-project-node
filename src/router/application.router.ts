@@ -28,3 +28,5 @@ const Routes: Array<IRouter> = [
     controller: ApplicationController,
   }
 ]
+
+module.exports = Routes;
