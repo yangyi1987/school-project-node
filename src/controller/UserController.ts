@@ -33,7 +33,6 @@ export class UserController {
 
     public async login(req: Request, res: Response) {
         const user: any = await this.userRepository.find({code: req.body.code, password: req.body.password});
-        return this.userServer.loginServer(user[0])
+        this.userServer.loginServer(user, req, res);
     }
-
 }

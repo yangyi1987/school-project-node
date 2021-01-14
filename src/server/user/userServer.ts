@@ -1,20 +1,23 @@
 const jwt = require('jsonwebtoken');
-const  secret: string = "userToken"
+const secret: string = "userToken"
 
 export class UserServer {
-  loginServer(user: any) {
-    if(!user.id) return {code: 0, message: "登录失败,请检查账号和密码是否正确", record: null};
+  public loginServer(user: any,req: any, res: any): void {
+    if(user[0]) {
     let token = this.createToken({code: user.code});
-    return {code: 1, message: "登陆成功", record: user, token: token}
+      res.status(200).send({code: 1, message: "登陆成功", record: user, token: token});
+    } else {
+      res.status(403).send({code: 0, message: "请检查账号和密码是否正确", record: null});
+    }
   }
-
-  createToken(info) {
-    return jwt.sign(info, secret, {expiresIn: 6*60*10});
+  // 生成 token
+  public  createToken(info): string {
+    return jwt.sign(info, "userToken", {expiresIn: 6*60*10});
   }
-
-  verifyToken(token) {
+  // 验证 token
+  public verifyToken(token) {
     return new Promise((resolve, reject) => {
-      jwt.verify(token, secret, (error, result) => {
+      jwt.verify(token, "userToken", (error, result) => {
               if(error){
                   reject(error)
               } else {

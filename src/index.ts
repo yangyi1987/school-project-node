@@ -5,6 +5,7 @@ import * as bodyParser from "body-parser";
 import {Request, Response} from "express";
 import { UserServer } from './server/user/userServer'
 import  Routes  from './router/index'
+import { nextTick } from "process";
 
 createConnection().then(async connection => {
 
@@ -12,32 +13,33 @@ createConnection().then(async connection => {
     const app = express();
     app.use(bodyParser.json());
 
-    // app.header({
-    //         "Access-Control-Allow-Origin": "*",
-    //         "Access-Control-Allow-Methods": "GET,POST OPTIONS DELETE PUT"
-    //     });
+    app.all("*",(req, res, next) => {
+        res.header('Access-Control-Allow-Origin', '*');
+        res.header('Access-Control-Allow-Headers', 'Authorization,X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method' )
+        res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PATCH, PUT, DELETE');
+        res.header('Allow', 'GET, POST, PATCH, OPTIONS, PUT, DELETE');
+        next();
+    })
 
-    // 用户 token 验证
-    // app.use((req: Request, res: Response, next: Function)=>{
-        // res.header({
-        //     "Access-Control-Allow-Origin": "*",
-        //     "Access-Control-Allow-Methods": "GET,POST OPTIONS DELETE PUT"
-        // });
-        // if(req.path !== '/login') {
-        //     userServer.verifyToken(req.header.authorization).then(()=>{
-        //         next()
-        //     }).catch((err: Error)=>{
-        //         res.type("json");
-        //         res.status(401).send({code: 401, message: "token 过期,或没有token"})
-        //     })
-        // }
-    // })
+
+    app.use((req, res, next) => {
+        if(req.path !== '/login' && req.method !== "OPTIONS") {
+            let Authorization = req.get("Authorization");
+            userServer.verifyToken(Authorization).then(()=>{
+                console.log("验证成功");
+                next();
+            }).catch((err: Error)=>{
+                res.type("json");
+                res.status(403);
+                res.rend({message: "token 过期,或没有token"});
+                console.log("验证失败");
+            })
+        }
+    });
 
     // register express routes from defined application routes
     Routes.forEach(route => {
         (app as any)[route.method](route.route, (req: Request, res: Response, next: Function) => {
-            res.header("Access-Control-Allow-Origin", "*");
-            res.header("Access-Control-Allow-Methods", "GET,POST, OPTIONS, DELETE, PUT");
             const result = (new (route.controller as any))[route.action](req, res, next);
             if (result instanceof Promise) {
                 result.then(result => result !== null && result !== undefined ? res.send(result) : undefined);
