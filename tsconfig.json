@@ -4,12 +4,19 @@
          "es5",
          "es6"
       ],
-      "target": "es5",
-      "module": "commonjs",
+      "target": "es5", // 编译成 es5
+      "module": "commonjs", // module用来指定要使用的模板标准
       "moduleResolution": "node",
-      "outDir": "./build",
+      "outDir": "./build", // outDir用来指定输出文件夹，值为一个文件夹路径字符串，输出的文件都将放置在这个文件夹
+
       "emitDecoratorMetadata": true,
       "experimentalDecorators": true,
       "sourceMap": true
-   }
+   },
+   "include": [
+      "src/**/*"
+   ],
+   "exclude": [
+      "node_modules"
+   ]
 }
