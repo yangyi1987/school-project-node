@@ -7,18 +7,35 @@ export class User {
     public id: number;
 
     @Column()
-    public code: string;
+    public openid: string;
 
     @Column()
-    public  password: string;
+    public nickname: string;
 
     @Column()
-    public userName: string;
+    public avatarurl: string;
 
     @Column()
-    public position: string;
+    public gender: number;
 
     @Column()
-    public roles: string
+    public country: string;
 
+    @Column()
+    public province: string;
+
+    @Column()
+    public city: string;
+
+    @Column()
+    public language: string;
+
+    @Column()
+    public ctime: string;
+
+    @Column()
+    public mobile: string;
+
+    @Column()
+    public telnum: string;
 }

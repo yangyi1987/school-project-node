@@ -23,8 +23,8 @@ const Routes: Array<IRouter> = [{
     action: "delete"
 },
 {
-    method: "post",
-    route: "/users",
+    method: "patch",
+    route: "/users/:id",
     controller: UserController,
     action: "update"
 },
