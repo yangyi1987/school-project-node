@@ -8,27 +8,53 @@ export class ApplicationController {
 
     private ApplicationRepository = getRepository(Application);
 
-    // 查询所有的引用
+    // get application list
     public async index(req: Request, res: Response, next: NextFunction) {
         return this.ApplicationRepository.find();
     }
 
-    //添加应用
-    public async create(req: Request, res: Response, next: NextFunction) {
+    // find a application
+    public async find(req: Request, res: Response, next: NextFunction) {
+      let id = +req.params.id;
+      let app = await this.ApplicationRepository.findOne(id);
+      if(app) {
+        res.send(app);
+        res.end();
+      } else {
+        res.status(404);
+        res.send({data: null, message: '应用不存在'});
+        res.end();
+      }
+    }
+
+  public async create(req: Request, res: Response, next: NextFunction) {
       this.ApplicationRepository
       return this.ApplicationRepository.create(req.body);
   }
 
-  // 删除一个应用
+  // delete application
   public async delete(req: Request, res: Response, next: NextFunction) {
-    return this.ApplicationRepository.delete(req.params.id);
+    this.ApplicationRepository.delete(req.params.id);
+    return "应用成功删除";
   }
 
-  //修改引用信息
+  // update a application
   public async update(req: Request, res: Response, next: NextFunction) {
-    const id = req.body.id;
-    delete req.body.id;
-    return this.ApplicationRepository.update(id, req.body)
+    let id = +req.params.id;
+    let body = req.body;
+    let app = await this.ApplicationRepository.findOne(id);
+    Object.keys(body).forEach(key=>{
+      app[key] = body[key];
+    })
+    this.ApplicationRepository.save(app).then(record=>{
+      res.status(201);
+      res.send({data: record, message: '更新成功'});
+      res.end();
+    }).catch(err=>{
+      console.log("application 更新失败");
+      res.send("更新失败");
+      res.end();
+    })
   }
 
 }

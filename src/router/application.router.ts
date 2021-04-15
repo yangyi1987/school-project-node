@@ -10,6 +10,12 @@ const Routes: Array<IRouter> = [
     controller: ApplicationController,
   },
   {
+    method: 'get',
+    action: "find",
+    route: '/applications/:id',
+    controller: ApplicationController,
+  },
+  {
     method: 'delete',
     action: "delete",
     route: '/applications/:id',
@@ -24,7 +30,7 @@ const Routes: Array<IRouter> = [
   {
     method: 'patch',
     action: "update",
-    route: '/applications',
+    route: '/applications/:id',
     controller: ApplicationController,
   }
 ]

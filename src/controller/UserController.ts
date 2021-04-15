@@ -47,7 +47,7 @@ export class UserController {
         })
     }
 
-    // 删除某个用户
+    // delete a user
     public async delete(req: Request, res: Response, next: NextFunction) {
         const user: User = await this.userRepository.findOne(+req.params.id);
         this.userRepository.remove(user).then(result=>{
