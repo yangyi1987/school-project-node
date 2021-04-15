@@ -15,8 +15,8 @@ export class ApplicationController {
 
     // find a application
     public async find(req: Request, res: Response, next: NextFunction) {
-      let id = +req.params.id;
-      let app = await this.ApplicationRepository.findOne(id);
+      let id: number = +req.params.id;
+      let app: Application = await this.ApplicationRepository.findOne(id);
       if(app) {
         res.send(app);
         res.end();
@@ -40,13 +40,13 @@ export class ApplicationController {
 
   // update a application
   public async update(req: Request, res: Response, next: NextFunction) {
-    let id = +req.params.id;
+    let id: number = +req.params.id;
     let body = req.body;
-    let app = await this.ApplicationRepository.findOne(id);
+    let app: Application | null | undefined = await this.ApplicationRepository.findOne(id);
     Object.keys(body).forEach(key=>{
       app[key] = body[key];
     })
-    this.ApplicationRepository.save(app).then(record=>{
+    this.ApplicationRepository.save(app).then((record: Application)=>{
       res.status(201);
       res.send({data: record, message: '更新成功'});
       res.end();

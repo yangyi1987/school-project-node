@@ -19,8 +19,8 @@ export class UserController {
 
     // 查询 id 为 req.params.id 的用户
     public async find(req: Request, res: Response, next: NextFunction) {
-        let id = +req.params.id;
-        let user = await this.userRepository.findOne(id);
+        let id: number = +req.params.id;
+        let user: User | null | undefined = await this.userRepository.findOne(id);
         if(user) {
             res.status(200);
             res.send({data: user, message: "用户查询成功"});
@@ -62,13 +62,11 @@ export class UserController {
         })
     }
 
-
-
     // user info update
     public async update(req: Request, res: Response, next: NextFunction) {
         let body = req.body;
-        let id = +req.params.id;
-        let user = await this.userRepository.findOne(id);
+        let id: number = +req.params.id;
+        let user: User | null | undefined = await this.userRepository.findOne(id);
         Object.keys(body).forEach(key=>{
             if(key !== 'id') {
                 user[key] = body[key]

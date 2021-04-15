@@ -7,6 +7,7 @@ import {Request, Response} from "express";
 import  Routes  from './router/index'
 import { nextTick } from "process";
 import { verification } from './base/verification'
+import {verifyToken} from './controller/AdminController'
 
 
 createConnection().then(async connection => {
@@ -26,6 +27,11 @@ createConnection().then(async connection => {
         res.header('Allow', 'GET, POST, PATCH, OPTIONS, PUT, DELETE');
         next();
     })
+
+    // 管理员登录验证
+    // app('/admins/*', (req, res, next)=>{
+    //     req.get('')
+    // })
 
     // 用户登陆验证
     // app.use(verification)
